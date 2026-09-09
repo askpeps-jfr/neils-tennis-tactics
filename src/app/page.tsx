@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import AboutCoach from "@/components/AboutCoach";
 import TargetProfiles from "@/components/TargetProfiles";
+import Testimonials from "@/components/Testimonials";
 import CourtCoverage from "@/components/CourtCoverage";
 import TacticalVault from "@/components/TacticalVault";
 import GearTeaser from "@/components/GearTeaser";
@@ -17,6 +18,7 @@ export default function Home() {
         <Hero />
         <AboutCoach />
         <TargetProfiles />
+        <Testimonials />
         <CourtCoverage />
         <TacticalVault />
         <GearTeaser />

@@ -28,7 +28,7 @@ export default function AboutCoach() {
   return (
     <section
       id="coach"
-      className="scroll-mt-28 px-6 py-24 sm:py-32 md:scroll-mt-24"
+      className="scroll-mt-20 px-6 pb-16 pt-12 md:scroll-mt-24 md:pb-24 md:pt-20"
     >
       <div className="mx-auto max-w-5xl">
         <div className="rounded-xl border border-court-border/70 bg-court-card p-8 transition-all duration-300 hover:border-volt/50 hover:shadow-[0_0_25px_rgba(204,255,0,0.08)] sm:p-12">

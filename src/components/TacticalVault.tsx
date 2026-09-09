@@ -39,7 +39,7 @@ export default function TacticalVault() {
   return (
     <section
       id="vault"
-      className="scroll-mt-28 px-6 py-24 sm:py-32 md:scroll-mt-24"
+      className="scroll-mt-20 px-6 pb-16 pt-12 md:scroll-mt-24 md:pb-24 md:pt-20"
     >
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-col items-center text-center">

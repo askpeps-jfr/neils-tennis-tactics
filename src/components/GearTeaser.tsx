@@ -33,7 +33,7 @@ export default function GearTeaser() {
   return (
     <section
       id="gear"
-      className="scroll-mt-28 border-t border-slate-900 bg-[#070C18] py-20 md:scroll-mt-24"
+      className="scroll-mt-20 border-t border-slate-900 bg-[#070C18] pb-16 pt-12 md:scroll-mt-24 md:pb-24 md:pt-20"
     >
       <div className="mx-auto max-w-7xl px-6">
         <div className="flex flex-col items-center text-center">

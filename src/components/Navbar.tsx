@@ -6,14 +6,28 @@ import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
+  { label: "Coach", href: "#coach" },
   { label: "Programs", href: "#programs" },
+  { label: "Results", href: "#results" },
   { label: "SGV Courts", href: "#courts" },
   { label: "Tactical Vault", href: "#vault" },
   { label: "Apparel", href: "#gear" },
   { label: "Rates", href: "#rates" },
 ];
 
-const sectionIds = ["programs", "courts", "vault", "gear", "rates", "book"];
+const sectionIds = [
+  "coach",
+  "programs",
+  "results",
+  "courts",
+  "vault",
+  "gear",
+  "rates",
+  "book",
+];
+
+// Must match the drawer's `duration-300` transition class below.
+const DRAWER_TRANSITION_MS = 300;
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -57,16 +71,28 @@ export default function Navbar() {
 
   function handleNavClick(e: MouseEvent<HTMLAnchorElement>, targetId: string) {
     e.preventDefault();
-    // Close the drawer first and wait a frame so its collapse doesn't
-    // shift the layout mid-animation and throw off the scroll target.
+    const wasOpen = isOpen;
     setIsOpen(false);
-    requestAnimationFrame(() => {
+
+    const scrollToTarget = () => {
       const element = document.getElementById(targetId);
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
         setActiveSection(targetId);
       }
-    });
+    };
+
+    // The drawer now animates closed over DRAWER_TRANSITION_MS instead of
+    // unmounting instantly, so its collapsing height keeps shifting the
+    // page layout for the duration of that transition. Starting the scroll
+    // before it settles throws off the target position (same overshoot bug
+    // as an instant-unmount close racing an in-flight scroll), so wait it
+    // out first.
+    if (wasOpen) {
+      setTimeout(scrollToTarget, DRAWER_TRANSITION_MS);
+    } else {
+      scrollToTarget();
+    }
   }
 
   return (
@@ -76,16 +102,24 @@ export default function Navbar() {
           href="#hero"
           onClick={(e) => {
             e.preventDefault();
+            const wasOpen = isOpen;
             setActiveSection("");
             setIsOpen(false);
-            requestAnimationFrame(() => {
+
+            const scrollToHero = () => {
               const hero = document.getElementById("hero");
               if (hero) {
                 hero.scrollIntoView({ behavior: "smooth" });
               } else {
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }
-            });
+            };
+
+            if (wasOpen) {
+              setTimeout(scrollToHero, DRAWER_TRANSITION_MS);
+            } else {
+              scrollToHero();
+            }
           }}
           className="group flex items-center gap-2"
         >
@@ -109,7 +143,7 @@ export default function Navbar() {
           />
         </a>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-5 lg:gap-7 md:flex">
           {navLinks.map((link) => {
             const id = link.href.slice(1);
             const isActive = activeSection === id;
@@ -150,43 +184,51 @@ export default function Navbar() {
         </div>
       </div>
 
-      {isOpen && (
-        <div className="border-t border-court-border bg-court-navy/95 backdrop-blur-xl md:hidden">
-          <nav className="flex flex-col px-6 py-2">
-            {navLinks.map((link) => {
-              const id = link.href.slice(1);
-              const isActive = activeSection === id;
-              return (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  onClick={(e) => handleNavClick(e, id)}
+      <div
+        aria-hidden={!isOpen}
+        className={cn(
+          "overflow-hidden border-t border-court-border bg-court-navy/95 backdrop-blur-xl transition-all duration-300 ease-out md:hidden",
+          isOpen
+            ? "max-h-[32rem] translate-y-0 opacity-100"
+            : "max-h-0 -translate-y-2 opacity-0",
+        )}
+      >
+        <nav className="flex flex-col px-6 py-2">
+          {navLinks.map((link) => {
+            const id = link.href.slice(1);
+            const isActive = activeSection === id;
+            return (
+              <a
+                key={link.label}
+                href={link.href}
+                tabIndex={isOpen ? 0 : -1}
+                onClick={(e) => handleNavClick(e, id)}
+                className={cn(
+                  "flex min-h-[44px] items-center gap-2.5 border-b border-court-border/60 text-base font-medium text-slate-400 transition-colors last:border-b-0 hover:text-court-chalk",
+                  isActive && "font-semibold text-volt hover:text-volt",
+                )}
+              >
+                <span
                   className={cn(
-                    "flex min-h-[44px] items-center gap-2.5 border-b border-court-border/60 text-base font-medium text-slate-400 transition-colors last:border-b-0 hover:text-court-chalk",
-                    isActive && "font-semibold text-volt hover:text-volt",
+                    "h-1.5 w-1.5 rounded-full bg-volt opacity-0 transition-opacity",
+                    isActive && "opacity-100",
                   )}
-                >
-                  <span
-                    className={cn(
-                      "h-1.5 w-1.5 rounded-full bg-volt opacity-0 transition-opacity",
-                      isActive && "opacity-100",
-                    )}
-                  />
-                  {link.label}
-                </a>
-              );
-            })}
+                />
+                {link.label}
+              </a>
+            );
+          })}
 
-            <a
-              href="#book"
-              onClick={(e) => handleNavClick(e, "book")}
-              className="my-4 flex min-h-[44px] w-full items-center justify-center rounded-md bg-volt px-4 text-sm font-bold text-court-navy"
-            >
-              [ Book Assessment ]
-            </a>
-          </nav>
-        </div>
-      )}
+          <a
+            href="#book"
+            tabIndex={isOpen ? 0 : -1}
+            onClick={(e) => handleNavClick(e, "book")}
+            className="my-4 flex min-h-[44px] w-full items-center justify-center rounded-md bg-volt px-4 text-sm font-bold text-court-navy"
+          >
+            [ Book Assessment ]
+          </a>
+        </nav>
+      </div>
     </header>
   );
 }

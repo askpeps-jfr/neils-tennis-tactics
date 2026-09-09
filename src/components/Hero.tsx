@@ -27,7 +27,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative flex min-h-screen scroll-mt-28 items-center overflow-hidden px-6 py-24 sm:py-32 md:scroll-mt-24"
+      className="relative flex min-h-screen scroll-mt-20 items-center overflow-hidden px-6 py-24 sm:py-32 md:scroll-mt-24"
     >
       <Image
         alt=""

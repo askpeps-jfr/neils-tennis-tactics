@@ -3,7 +3,9 @@
 import type { MouseEvent } from "react";
 
 const footerLinks = [
+  { label: "Coach", href: "#coach" },
   { label: "Programs", href: "#programs" },
+  { label: "Results", href: "#results" },
   { label: "Courts", href: "#courts" },
   { label: "Vault", href: "#vault" },
   { label: "Apparel", href: "#gear" },
